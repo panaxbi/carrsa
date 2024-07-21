@@ -1,0 +1,54 @@
+{
+  "sources": {
+    "^#([^?]+)(\\?.*)?": {
+      "server:request": {
+        "FROM": "PanaxBI.$1"
+      }
+    },
+    "#": "#shell",
+    "#shell": null,
+    "#login": null,
+    "#loading": null,
+    "#settings": "settings.xml",
+    "#menu": "menus.xml",
+    "#globalization": [ "assets/globalization/headerText.${xo.session.locale.split('-').shift()}.resx", "assets/globalization/headerText.resx" ],
+    "#sitemap": "sitemap.xml",
+    "#movimientos": "movimientos.xml",
+    "#calculos": "movimientos.xml",
+    "#tarifas": "tarifas.xml"
+  },
+  "start": [ "loading.xslt" ],
+  "settings": {
+    "^#.*": {
+      "headers": {
+        "Cache-Control": "max-age=0",
+        "x-debugging": "true",
+        "expiry": 1
+      }
+    },
+    "#tarifas": {
+      "stylesheets": [
+        {
+          "href": "tarifas.xslt",
+          "target": "main"
+        }
+      ]
+    },
+    "#calculos": {
+      "stylesheets": [
+        {
+          "href": "calculos.xslt",
+          "target": "@#shell main"
+        }
+      ]
+    },
+    "server:applyPermissions": {
+      "headers": {
+        "x-payload-parameter-name": "@input"
+      }
+    },
+    "#shell": {
+      "hash": ""
+    }
+  }
+}

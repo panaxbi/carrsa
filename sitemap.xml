@@ -1,0 +1,7 @@
+﻿<sitemap xmlns:xo="http://panax.io/xover" xo:id="sitemap_434e01e4_1a36_42d2_ba21_557cc26aa1a4">
+	<item id="1" title="Reportes Financieros" xo:id="item_9b525051_bf25_4cb0_963d_ac7364db0f61">
+		<item id="3" title="Cálculos" target="#calculos" xo:id="item_1536197c_e3a3_45cb_a920_352b7fbbfb63"/>
+		<item id="2" title="Movimientos auxiliares" target="#movimientos" xo:id="item_1536197c_e3a3_45cb_a920_352b7fbbfb63"/>
+		<item id="4" title="Tarifas" target="#tarifas" xo:id="item_1536197c_e3a3_45cb_a920_352b7fbbfb63"/>
+	</item>
+</sitemap>
