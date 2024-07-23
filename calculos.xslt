@@ -18,7 +18,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 
 	<xsl:key name="razon_social" match="razon_social[not(@state:selected)]/row/@id" use="'*'"/>
 	<xsl:key name="razon_social" match="razon_social/row[@id=../@state:selected]/@id" use="'*'"/>
-	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@src,'::',../@mt,'::',../@cl)"/>
+	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@rs,'::',../@mth,'::',../@cl)"/>
 	<xsl:template match="/">
 		<body>
 			<style id="Cálculos PF (Rafael Alvarado) 2024_16857_Styles">
@@ -633,9 +633,10 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 				--&amp;gt;
 			</style>
 			<style>
+				<![CDATA[
 				table.calculos td, table.calculos [scope=row]  {
 					padding-inline: .5rem !important;
-				}
+				}]]>
 			</style>
 			<div id="Cálculos PF (Rafael Alvarado) 2024_16857" align="center" x:publishsource="Excel" class="selection-enabled validation-enabled">
 				<table class="calculos bg-white" border="0" cellpadding="0" cellspacing="0" width="1243" style="border-collapse:&#10; collapse;table-layout:fixed;width:930pt">
@@ -715,10 +716,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 										<span style="mso-spacerun:yes"> </span>
 									</th>
 									<xsl:for-each select="//fechas/row/@key">
+										<xsl:variable name="amt" select="key('amt',concat($rs,'::',.,'::',$cl))"/>
 										<td class="xl6516857 cell money" align="right">
-											<xsl:call-template name="format">
-												<xsl:with-param name="value" select="key('amt',concat($rs,'::',.,'::',$cl))"/>
-											</xsl:call-template>
+											<a href="#polizas?@razon_social={$rs}&amp;@clasificacion={$cl}&amp;@fecha={.}">
+												<xsl:call-template name="format">
+													<xsl:with-param name="value" select="$amt"/>
+												</xsl:call-template>
+											</a>
 										</td>
 									</xsl:for-each>
 								</tr>

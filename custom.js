@@ -9,7 +9,6 @@ xo.listener.on(['xo.Source:fetch', 'xo.Source:failure'], async function ({ setti
         progress.value = 100;
     }
     progress.remove();
-
 })
 
 Object.defineProperty(xo.session, 'login', {
@@ -162,13 +161,6 @@ xo.listener.on('beforeTransform?stylesheet.href=^page_controls.*\\.xslt?styleshe
 xo.listener.on('beforeTransform?stylesheet.href=title.xslt?stylesheet.href=shell_buttons.xslt?stylesheet.href=page_navbar.xslt?stylesheet.href=^page_controls\\..*\\.xslt::model', function ({ stylesheet }) {
     event.detail.keepDimensions = true;
     event.stopImmediatePropagation()
-})
-
-xo.listener.on(['replaceWith::[xo-stylesheet="page_controls.mantenibles.xslt"]'], ({ new_node, old }) => {
-    if (!new_node.childNodes.length) {
-        new_node.replaceChildren(...old.childNodes)
-        //new_node.querySelectorAll("[xo-stylesheet]").toArray().concat([new_node].filter(el => el.matches("[xo-stylesheet]")))
-    }
 })
 
 xo.listener.on(['transform'], ({ result }) => {
@@ -621,43 +613,18 @@ xo.listener.on(`change::@state:date`, function ({ value, event }) {
     store.document.fetch();
 })
 
-xo.listener.on(`beforeTransform?stylesheet.href=estado_resultados_semanal.xslt`, function ({ document }) {
-    let start_week = this.selectFirst(`//fechas/@state:start_week`)
-    if (start_week) {
-        this.select(`//fechas/row[@desc="${start_week}"]`).forEach(el => el.select(`preceding-sibling::*`).remove())
-    }
-    let end_week = this.selectFirst(`//fechas/@state:end_week`)
-    if (end_week) {
-        this.select(`//fechas/row[@desc="${end_week}"]`).forEach(el => el.select(`following-sibling::*`).remove())
-    }
-})
-
-xo.listener.on(`beforeTransform?stylesheet.href=ventas_por_fecha_embarque.xslt`, function ({ document }) {
-    for (let attr of [...this.documentElement.attributes].filter(attr => attr.namespaceURI == 'http://panax.io/state/filter')) {
-        this.select(`//ventas/row[${attr.value.split("|").map(value => `@${attr.localName}!="${value}"`).join(" and ")}]`).forEach(el => el.remove())
-    }
-
-    let amt = this.select(`//ventas/row/@amt`).reduce(Sum, 0);
-    let qtym = this.select(`//ventas/row/@qtym`).reduce(Sum, 0);
-    this.selectFirst(`//ventas`).setAttribute(`state:avg_upce`, amt / qtym);
-    let tcos = this.select(`//ventas/row/@tcos`).reduce(Sum, 0);
-    let amt_ad = this.select(`//ventas/row/@amt_ad`).reduce(Sum, 0);
-    this.selectFirst(`//ventas`).setAttribute(`state:avg_pce`, (amt - tcos - amt_ad) / qtym);
-
-})
-
 xo.listener.on(`beforeTransform::model[*/@filter:*]`, function ({ document }) {
     for (let attr of this.select(`//@filter:*`)) {
         attr.parentNode.select(`row[${attr.value.split("|").map(value => `not(@${attr.localName}="${value}")`).join(" and ")}]`).forEach(el => el.remove())
     }
 })
 
-let mapping = { "razon_social": "src" }
+let mapping = { "razon_social": "rs" }
 xo.listener.on(`beforeTransform?stylesheet.target=main::model[//@state:selected]`, function ({ document }) {
     for (let attr of this.select(`//@state:selected`)) {
         let value = attr.value;
         let ref_attr = mapping[attr.parentNode.localName];
-        document.select(`model/*[not(@xsi:type="dimension")]/row[not(@${ref_attr}="${value}")]`).remove()
+        document.select(`model/*[namespace-uri()=""][not(@xsi:type="dimension")]/row[not(@${ref_attr}="${value}")]`).remove()
     }
 })
 
@@ -701,11 +668,6 @@ xover.listener.on(`beforeFetch?request`, function ({ request }) {
     session_id && request.headers.set("x-session-id", session_id)
 })
 
-xover.listener.on(`change?xo.site.seed=#estado_resultados_semanal::@state:start_week|@state:end_week`, function () {
-    /*Prevents auto fetch*/
-    event.stopImmediatePropagation()
-})
-
 xover.listener.on(`change::@state:selected`, function ({ value, store }) {
     let definition = store.source.definition["server:request"];
     if (!definition) return;
@@ -719,7 +681,7 @@ xover.listener.on(`change?!value::@state:selected`, function ({ value, store }) 
 
 
 xover.listener.on(`beforeTransform?stylesheet.href=calculos.xslt`, function ({ document }) {
-    let razones_sociales_activas = document.select(".//@src").distinct();
+    let razones_sociales_activas = document.select(".//@rs").distinct();
     if (razones_sociales_activas.length) {
         this.select(`//razon_social/row[not(@id=${razones_sociales_activas.join()})]`).remove() // TODO: Refactor
     }
@@ -859,3 +821,13 @@ function collapse() {
 // TODO: Quitar columna
 
 // TODO: Ordenar columnas de agrupamiento al principio
+xo.server.ws = function (url, target) {
+    try {
+        const socket_io = io(url, { transports: ['websocket'] });
+        socket_io.on('message', function (data) {
+            xo.sources[target, target].documentElement.append(xo.xml.createNode(`<item/>`).set(data))
+        })
+    } catch (e) {
+        return Promise.reject(e);
+    }
+}

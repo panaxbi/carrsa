@@ -12,10 +12,19 @@
     "#settings": "settings.xml",
     "#menu": "menus.xml",
     "#globalization": [ "assets/globalization/headerText.${xo.session.locale.split('-').shift()}.resx", "assets/globalization/headerText.resx" ],
-    "#sitemap": "sitemap.xml",
-    "#movimientos": "movimientos.xml",
-    "#calculos": "movimientos.xml",
-    "#tarifas": "tarifas.xml"
+    "#sitemap": {
+      "server:request": {
+        "FROM": "#panax.getSitemap",
+        "parameters": "'${xo.session.user_login}'"
+      }
+    },
+    "#tarifas": "tarifas.xml",
+    "#ws": {
+      "server:ws": [
+        "https://server.panax.io:8004",
+        "#messages"
+      ]
+    }
   },
   "start": [ "loading.xslt" ],
   "settings": {
