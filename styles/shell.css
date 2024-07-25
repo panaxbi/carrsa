@@ -135,6 +135,12 @@ td.selected { /*.selection-enabled:not(:has(.bottom-selection)) .cell.selected*/
 }
 
 .cell * { cursor: inherit; }
+
+table a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
 /*
 a.auxiliar-polizas {
     display: none;

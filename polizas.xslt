@@ -23,6 +23,16 @@ xmlns:xo="http://panax.io/xover"
 	<xsl:key name="data_type" match="group:d/row/@desc" use="'date'"/>
 
 	<xsl:key name="data_type" match="polizas//@amt" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@oer" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@iva" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@amt_b" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@iva_ret" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@isr_ret" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@amt_t" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@iva_pag_na" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@iva_0" use="'money'"/>
+	<xsl:key name="data_type" match="polizas//@iva_ex" use="'money'"/>
+	<!--<xsl:key name="data_type" match="polizas//@*[contains(local-name(),'amt')]" use="'money'"/>-->
 
 	<xsl:key name="rows" match="//polizas/row[not(@xsi:type)]" use="name(..)"/>
 	<xsl:key name="facts" match="//polizas/row/@*[.!='' and namespace-uri()='']" use="name()"/>

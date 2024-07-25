@@ -9,7 +9,6 @@ xmlns:filter="http://panax.io/state/filter"
 xmlns:visible="http://panax.io/state/visible"
 xmlns:env="http://panax.io/state/environment"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:datagrid="http://panaxbi.com/widget/datagrid"
 xmlns:xo="http://panax.io/xover"
 xmlns:x="urn:schemas-microsoft-com:office:excel"
 >
@@ -19,6 +18,12 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="razon_social" match="razon_social[not(@state:selected)]/row/@id" use="'*'"/>
 	<xsl:key name="razon_social" match="razon_social/row[@id=../@state:selected]/@id" use="'*'"/>
 	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@rs,'::',../@mth,'::',../@cl)"/>
+	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@rs,'::',../@mth,'::',substring(../@cl,1,2))"/>
+	<xsl:key name="ing_grav" match="polizas/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="ing_grav" match="polizas/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="impuestos" match="deducciones/row[@iva_t]/@iva" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:template match="/">
 		<body>
 			<style id="Cálculos PF (Rafael Alvarado) 2024_16857_Styles">
@@ -636,9 +641,15 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 				<![CDATA[
 				table.calculos td, table.calculos [scope=row]  {
 					padding-inline: .5rem !important;
+				}
+				
+				table a {
+					text-decoration: none;
+					color: inherit;
+					cursor: pointer !important;
 				}]]>
 			</style>
-			<div id="Cálculos PF (Rafael Alvarado) 2024_16857" align="center" x:publishsource="Excel" class="selection-enabled validation-enabled">
+			<div id="Cálculos" align="center" x:publishsource="Excel" class="selection-enabled validation-enabled">
 				<table class="calculos bg-white" border="0" cellpadding="0" cellspacing="0" width="1243" style="border-collapse:&#10; collapse;table-layout:fixed;width:930pt">
 					<colgroup>
 						<col width="364" style="mso-width-source:userset;mso-width-alt:13312;width:273pt" />
@@ -699,16 +710,14 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								<td class="xl6416857">ABRIL</td>
 								<td class="xl6416857">MAYO</td>
 								<td class="xl6416857">JUNIO</td>
-								<td class="xl6416857">
-									JULIO<span style="mso-spacerun:yes"> </span>
-								</td>
+								<td class="xl6416857">JULIO</td>
 								<td class="xl6416857">AGOSTO</td>
 								<td class="xl6416857">SEPTIEMBRE</td>
 								<td class="xl6416857">OCTUBRE</td>
 								<td class="xl6416857">NOVIEMBRE</td>
 								<td class="xl6416857">DICIEMBRE</td>
 							</tr>
-							<xsl:for-each select="//clasificacion/row/@id">
+							<xsl:for-each select="//clasificacion/row/@cve">
 								<xsl:variable name="cl" select="."/>
 								<tr height="21" style="height:15.75pt">
 									<th scope="row" height="21" class="xl7116857" style="height:15.75pt; text-transform: uppercase; ">
@@ -717,10 +726,10 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									</th>
 									<xsl:for-each select="//fechas/row/@key">
 										<xsl:variable name="amt" select="key('amt',concat($rs,'::',.,'::',$cl))"/>
-										<td class="xl6516857 cell money" align="right">
-											<a href="#polizas?@razon_social={$rs}&amp;@clasificacion={$cl}&amp;@fecha={.}">
+										<td class="xl6516857 money" align="right">
+											<a class="link" href="?total={$amt}#polizas?@razon_social={$rs}&amp;@clasificacion={$cl}&amp;@fecha={.}">
 												<xsl:call-template name="format">
-													<xsl:with-param name="value" select="$amt"/>
+													<xsl:with-param name="value" select="sum($amt)"/>
 												</xsl:call-template>
 											</a>
 										</td>
@@ -813,18 +822,14 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								<td height="20" class="xl7116857" style="height:15.0pt">
 									INGRESOS GRAVADOS<span style="mso-spacerun:yes"> </span>
 								</td>
-								<td class="xl6516857" align="right">131,595.74</td>
-								<td class="xl6516857" align="right">189,257.27</td>
-								<td class="xl6516857" align="right">154,785.13</td>
-								<td class="xl6516857" align="right">143,861.57</td>
-								<td class="xl6516857" align="right">143,861.50</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('ing_grav',concat($rs,'::',.)))"/>
+									<td class="xl6516857" align="right">
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="$amt"/>
+										</xsl:call-template>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl1516857" style="height:15.0pt"></td>
@@ -843,18 +848,14 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl7116857" style="height:15.0pt">BASE GRAVABLE 16%</td>
-								<td class="xl6516857" align="right">113,444.60</td>
-								<td class="xl6516857" align="right">163,152.82</td>
-								<td class="xl6516857" align="right">133,435.46</td>
-								<td class="xl6516857" align="right">124,018.59</td>
-								<td class="xl6516857" align="right">124,018.53</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('ing_grav',concat($rs,'::',.,'::','16'))) div 1.16"/>
+									<td class="xl6516857" align="right">
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="$amt"/>
+										</xsl:call-template>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl1516857" style="height:15.0pt"></td>
@@ -873,18 +874,14 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl7216857" style="height:15.0pt">IVA POR PAGAR 16%</td>
-								<td class="xl7316857" align="right">18,151.14</td>
-								<td class="xl7316857" align="right">26,104.45</td>
-								<td class="xl7316857" align="right">21,349.67</td>
-								<td class="xl7316857" align="right">19,842.98</td>
-								<td class="xl7316857" align="right">19,842.97</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
-								<td class="xl7316857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('ing_grav',concat($rs,'::',.,'::','16'))) div 1.16 * 0.16"/>
+									<td class="xl7316857" align="right">
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="$amt"/>
+										</xsl:call-template>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl1516857" style="height:15.0pt"></td>
@@ -936,51 +933,41 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									Importe de IVA
 									Acreditable 16%
 								</td>
-								<td class="xl6516857" align="right">14,915.85</td>
-								<td class="xl6516857" align="right">21,662.65</td>
-								<td class="xl6516857" align="right">16,281.23</td>
-								<td class="xl6516857" align="right">398.47</td>
-								<td class="xl6516857" align="right">24,740.64</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('iva_acred',concat($rs,'::',.,'::','16')))"/>
+									<td class="xl6516857" align="right">
+										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="$amt"/>
+											</xsl:call-template>
+										</a>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl7116857" style="height:15.0pt">
 									Importe de IVA
 									Acreditable 8%
 								</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
-								<td class="xl6516857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('iva_acred',concat($rs,'::',.,'::','8')))"/>
+									<td class="xl6516857" align="right">
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="$amt"/>
+										</xsl:call-template>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl7516857" style="height:15.75pt">Total IVA Acreditable</td>
-								<td class="xl6616857" align="right">14,915.85</td>
-								<td class="xl6616857" align="right">21,662.65</td>
-								<td class="xl6616857" align="right">16,281.23</td>
-								<td class="xl6616857" align="right">398.47</td>
-								<td class="xl6616857" align="right">24,740.64</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
-								<td class="xl6616857" align="right">0.00</td>
+								<xsl:for-each select="//fechas/row/@key">
+									<xsl:variable name="amt" select="sum(key('iva_acred',concat($rs,'::',.)))"/>
+									<td class="xl6616857" align="right">
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="$amt"/>
+										</xsl:call-template>
+									</td>
+								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl1516857" style="height:15.75pt"></td>

@@ -168,6 +168,10 @@ xmlns:combobox="http://panax.io/widget/combobox"
 		</select>
 	</xsl:template>
 
+	<xsl:template mode="headerText" match="model/*[self::semanas|self::fechas]">
+		<xsl:text>Fechas</xsl:text>
+	</xsl:template>
+
 	<xsl:template mode="widget" match="model/fechas">
 		<xsl:variable name="default_date">
 			<xsl:choose>
@@ -264,6 +268,9 @@ xmlns:combobox="http://panax.io/widget/combobox"
 				</select>
 			</div>
 		</fieldset>
+	</xsl:template>
+
+	<xsl:template mode="widget" match="clasificacion|meses">
 	</xsl:template>
 
 	<xsl:template mode="widget" match="model/@*">
