@@ -37,4 +37,8 @@
 	<xsl:template mode="headerText" match="model/*/@*">
 		<xsl:value-of select="."/>
 	</xsl:template>
+
+	<xsl:template mode="headerText" match="*[@headerText]">
+		<xsl:apply-templates mode="headerText" select="@headerText"/>
+	</xsl:template>
 </xsl:stylesheet>

@@ -178,62 +178,6 @@ async function submit(node) {
     }
     progress.remove();
 }
-
-async function generateExcelFile(table, name) {
-    let progress = await xo.sources["loading.xslt"].render();
-    await xover.delay(500);
-    //if (this.Interval) window.clearInterval(this.Interval);
-    let _progress = 0;
-    let progress_bar = progress[0].querySelector('progress');
-    progress_bar.style.display = 'inline';
-
-    //this.Interval = setInterval(function () {
-    //    if (progress_bar) {
-    //        progress_bar.value = _progress;
-    //        console.log(_progress);
-    //    }
-    //}, 500);
-    table = table.cloneNode(true);
-    table.querySelectorAll('del,.hidden').toArray().remove();
-    let set_computed_background = function (cell) {
-        let border = cell.style.border;
-        let backgroundColor = cell.style.backgroundColor;
-        let color = cell.style.color;
-        let styleSheets = document.styleSheets;
-        for (let styleSheet of [...styleSheets]) {
-            try {
-                for (let rule of [...styleSheet.rules].filter(rule => rule.selectorText && (rule.style.border || rule.style.backgroundColor || rule.style.color) && cell.matches(rule.selectorText))) {
-                    if (!border && rule.style.border) {
-                        cell.style.border = rule.style.border;
-                    }
-                    if (!backgroundColor && rule.style.backgroundColor) {
-                        cell.style.backgroundColor = rule.style.backgroundColor;
-                    }
-                    if (!color && rule.style.color) {
-                        cell.style.color = rule.style.color;
-                    }
-                }
-            } catch (e) {
-                console.warn(e)
-            }
-        }
-    }
-    let rows = table.getElementsByTagName("tr");
-    let r = 0;
-    for (let row of rows) {
-        ++r;
-        _progress = r / rows.length * 100;
-        [...row.getElementsByTagName("td")].forEach(el => set_computed_background(el));
-        if (r % (rows.length / 10) == 0) {
-            progress_bar.value = _progress;
-            await xover.delay(500);
-        }
-    }
-    xo.dom.toExcel(table, name.split("?")[0])
-    progress.remove();
-    if (this.Interval) window.clearInterval(this.Interval);
-}
-
 xo.listener.on("mousedown", function (event) {
     if (!(event && event.buttons == 1 && (this.closest('.validation-enabled, .blacklist-enabled, .selection-enabled') && window.getComputedStyle(this).cursor == 'cell'))) return
     let parent_container = this.closest("table, tbody, .validation-enabled, .blacklist-enabled, .selection-enabled");

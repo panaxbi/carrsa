@@ -16,8 +16,6 @@ xmlns:combobox="http://panax.io/widget/combobox"
 	<xsl:import href="widgets/page_navbar.xslt"/>
 	<xsl:import href="widgets/combobox.xslt"/>
 
-	<xsl:template mode="widget" match="@*"/>
-
 	<xsl:param name="state:filterBy"></xsl:param>
 
 	<xsl:key name="data" match="model/movimientos" use="'*'"/>
@@ -86,73 +84,6 @@ xmlns:combobox="http://panax.io/widget/combobox"
 	<xsl:key name="year" match="fechas/fecha/@mes" use="substring(.,1,4)"/>
 	<xsl:template mode="buttons" match="*"/>
 
-	<xsl:template mode="widget" match="model/@*">
-		<style>
-			:root { --sections-filter-height: 86px; }
-			filter_by option {
-			font-size: 16pt;
-			}
-		</style>
-		<fieldset class="filter_by">
-			<legend>
-				<select style="font-weight: bold; padding: 1px 5px;" class="form-select" onchange="xo.state.filterBy=this.value">
-					<option value="ship_date">
-						<xsl:if test="$state:filterBy='' or $state:filterBy='ship_date'">
-							<xsl:attribute name="selected"/>
-						</xsl:if> Fecha de embarque
-					</option>
-					<option value="order">
-						<xsl:if test="$state:filterBy='order'">
-							<xsl:attribute name="selected"/>
-						</xsl:if>Sales Order
-					</option>
-					<option value="purchase_order">
-						<xsl:if test="$state:filterBy='purchase_order'">
-							<xsl:attribute name="selected"/>
-						</xsl:if>Purchase Order
-					</option>
-					<option value="grower_lot">
-						<xsl:if test="$state:filterBy='grower_lot'">
-							<xsl:attribute name="selected"/>
-						</xsl:if>Grower Lot
-					</option>
-				</select>
-			</legend>
-			<xsl:choose>
-				<xsl:when test="$state:filterBy='' or $state:filterBy='ship_date'">
-					<div class="input-group">
-						<input class="form-control" name="fecha_embarque_inicio" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_embarque_inicio" value="{../@state:fecha_embarque_inicio}"/>
-						<input class="form-control" name="fecha_embarque_fin" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_embarque_fin" value="{../@state:fecha_embarque_fin}"/>
-					</div>
-				</xsl:when>
-				<xsl:otherwise>
-					<input type="text" name="{$state:filterBy}" class="form-control" value="{../@state:*[local-name()=$state:filterBy]}" xo-slot="state:{$state:filterBy}"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</fieldset>
-		<xsl:apply-templates mode="widget" select="../*[@xsi:type='dimension']"/>
-	</xsl:template>
-
-	<xsl:template mode="widget" match="model/*">
-		<style>
-			:root { --sections-filter-height: 86px; }
-			filter_by option {
-			font-size: 16pt;
-			}
-		</style>
-		<fieldset>
-			<legend style="text-transform:capitalize">
-				<xsl:apply-templates mode="headerText" select="."/>
-			</legend>
-			<xsl:variable name="state:selected" select="@state:selected"/>
-			<xsl:apply-templates mode="combobox:widget" select=".">
-				<xsl:with-param name="dataset" select="row/@desc"/>
-				<xsl:with-param name="xo-slot">state:selected</xsl:with-param>
-				<xsl:with-param name="selected-value" select="$state:selected"/>
-			</xsl:apply-templates>
-		</fieldset>
-	</xsl:template>
-
 	<xsl:template mode="headerText" match="model/*[self::semanas|self::fechas]">
 		<select class="form-select" onchange="xo.state.filterBy=this.value">
 			<option value="weeks">
@@ -191,20 +122,10 @@ xmlns:combobox="http://panax.io/widget/combobox"
 		<xsl:variable name="curr_month" select="../fechas/row[@mes=$default_date]/@mes"/>
 		<xsl:variable name="start_week" select="../fechas/@state:start_week"/>
 		<xsl:variable name="end_week" select="../fechas/@state:end_week"/>
-
-		<style>
-			:root { --sections-filter-height: 86px; }
-		</style>
-
-		<fieldset>
-			<legend style="text-transform:capitalize">
-				<xsl:apply-templates mode="headerText" select="."/>
-			</legend>
-			<div class="input-group">
-				<input class="form-control" name="fecha_inicio" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_inicio" value="{@state:fecha_inicio}"/>
-				<input class="form-control" name="fecha_fin" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_fin" value="{@state:fecha_fin}"/>
-			</div>
-		</fieldset>
+		<div class="input-group">
+			<input class="form-control" name="fecha_inicio" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_inicio" value="{@state:fecha_inicio}"/>
+			<input class="form-control" name="fecha_fin" type="date" pattern="yyyy-mm-dd" xo-slot="state:fecha_fin" value="{@state:fecha_fin}"/>
+		</div>
 	</xsl:template>
 
 	<xsl:template mode="widget" match="model/semanas">
@@ -270,11 +191,10 @@ xmlns:combobox="http://panax.io/widget/combobox"
 		</fieldset>
 	</xsl:template>
 
-	<xsl:template mode="widget" match="clasificacion|meses">
-	</xsl:template>
-
-	<xsl:template mode="widget" match="model/@*">
-		<xsl:comment>debug:info</xsl:comment>
-		<xsl:apply-templates mode="widget" select="../*[@xsi:type='dimension']"/>
+	<xsl:template mode="widget" match="*">
+		<xsl:apply-templates mode="combobox:widget" select=".">
+			<xsl:with-param name="dataset" select="row/@desc"/>
+			<xsl:with-param name="xo-slot">state:selected</xsl:with-param>
+		</xsl:apply-templates>
 	</xsl:template>
 </xsl:stylesheet>
