@@ -35,7 +35,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 
 	<xsl:key name="meses" match="meses/row/@key" use="'active'"/>
 
-	<xsl:key name="clasificaciones" match="clasificacion/row/@cve" use="substring(.,1,1)"/>
+	<xsl:key name="clasificaciones" match="clasificacion/row[not(starts-with(@cve,'15'))]/@cve" use="substring(.,1,1)"/>
 
 	<xsl:template mode="xo:scope" match="@*">
 		<xsl:apply-templates mode="xo:scope" select=".."/>
@@ -1010,7 +1010,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								<xsl:for-each select="$x-dimension">
 									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','16'))"/>
 									<td class="xl6516857" align="right">
-										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
+										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=16">
 											<xsl:apply-templates mode="xo:scope" select="$amt"/>
 											<xsl:call-template name="format">
 												<xsl:with-param name="value" select="sum($amt)"/>
@@ -1027,23 +1027,27 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								<xsl:for-each select="$x-dimension">
 									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','8'))"/>
 									<td class="xl6516857" align="right">
-										<xsl:apply-templates mode="xo:scope" select="$amt"/>
-										<xsl:call-template name="format">
-											<xsl:with-param name="value" select="sum($amt)"/>
-										</xsl:call-template>
+										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=8">
+											<xsl:apply-templates mode="xo:scope" select="$amt"/>
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="sum($amt)"/>
+											</xsl:call-template>
+										</a>
 									</td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl7516857" style="height:15.75pt">Total IVA Acreditable</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.))"/>
+									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','16'))|key('iva_acred',concat($rs,'::',.,'::','8'))"/>
 									<td class="xl6616857" align="right">
 										<!--<xsl:apply-templates mode="xo-scope" select="$amt"/>-->
-										<xsl:apply-templates mode="xo:scope" select="$amt"/>
-										<xsl:call-template name="format">
-											<xsl:with-param name="value" select="sum($amt)"/>
-										</xsl:call-template>
+										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=8,16">
+											<xsl:apply-templates mode="xo:scope" select="$amt"/>
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="sum($amt)"/>
+											</xsl:call-template>
+										</a>
 									</td>
 								</xsl:for-each>
 							</tr>
