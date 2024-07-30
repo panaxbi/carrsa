@@ -28,8 +28,11 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="impuestos" match="polizas/row[@iva_t]/@iva" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="impuestos" match="polizas/row[@iva_t]/@iva" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 
-	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
-	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt_iva" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="iva_acred" match="deducciones/row[@iva_t]/@amt_iva" use="concat(../@rs,'::',../@mth)"/>
+
+	<xsl:key name="iva_base_gravable" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="iva_base_gravable" match="deducciones/row[@iva_t]/@amt" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="declaracion" match="declaraciones/row/@file" use="concat(../@rs,'::',../@mth)"/>
 
@@ -748,7 +751,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="34" style="mso-height-source:userset;height:45px" class="header sticky">
 								<td colspan="7" height="34" class="xl9316857" style="height:25.5pt">
 									Cálculo de IVA
-									Ejercicio 2024
+									Ejercicio <xsl:value-of select="//ejercicio/@state:selected"/>
 								</td>
 								<td class="xl1516857"></td>
 								<td class="xl1516857"></td>
@@ -1224,7 +1227,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="28" style="mso-height-source:userset;height:45px" class="header sticky">
 								<td colspan="7" height="28" class="xl9416857" style="height:21.0pt">
-									<a name="RANGE!A35:G79">Cálculo de ISR Ejercicio 2024</a>
+									<a name="RANGE!A35:G79">Cálculo de ISR Ejercicio <xsl:value-of select="//ejercicio/@state:selected"/></a>
 								</td>
 								<td class="xl6316857"></td>
 								<td class="xl6316857"></td>
@@ -1381,7 +1384,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl7116857" style="height:15.75pt">Base Gravable 16%</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','16'))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.,'::','16'))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=16">
@@ -1395,7 +1398,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt">Base Gravable 8%</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','8'))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.,'::','8'))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=8">
@@ -1409,7 +1412,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt">Base Gravable 0%</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','0'))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.,'::','0'))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa=0">
@@ -1423,7 +1426,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt">Base Gravable Exenta</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.,'::','x'))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.,'::','x'))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}&amp;@tasa='exenta'">
@@ -1458,7 +1461,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									PERIODO<span style="mso-spacerun:yes"> </span>
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
@@ -1472,7 +1475,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl1516857" style="height:15.75pt"></td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.))"/>
 									<td class="xl6516857" align="right"></td>
 								</xsl:for-each>
 							</tr>
@@ -1482,7 +1485,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									ANTERIORES
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.))"/>
 									<td class="xl6516857" align="right">
 										??
 									</td>
@@ -1491,7 +1494,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt"></td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('iva_acred',concat($rs,'::',.))"/>
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.))"/>
 									<td class="xl6516857" align="right"></td>
 								</xsl:for-each>
 							</tr>
@@ -1558,7 +1561,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
-								<td height="21" class="xl8216857" width="364" style="height:15.75pt;width:273pt"> </td>
+								<td height="21" class="xl6516857" width="364" style="height:15.75pt;width:273pt"> </td>
 								<xsl:for-each select="$x-dimension">
 									<td class="xl6516857" align="right"></td>
 								</xsl:for-each>
@@ -1619,7 +1622,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt"></td>
 								<xsl:for-each select="$x-dimension">
-									<td class="xl8916857" align="right"></td>
+									<td class="xl6316857" align="right"></td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
