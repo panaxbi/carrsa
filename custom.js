@@ -765,13 +765,29 @@ function collapse() {
 // TODO: Quitar columna
 
 // TODO: Ordenar columnas de agrupamiento al principio
-xo.server.ws = function (url, target) {
+xo.server.ws = function (url, listeners = {}) {
     try {
         const socket_io = io(url, { transports: ['websocket'] });
-        socket_io.on('message', function (data) {
-            xo.sources[target, target].documentElement.append(xo.xml.createNode(`<item/>`).set(data))
-        })
+
+        for ([listener, handler] of Object.entries(listeners)) {
+            socket_io.on(listener, async function (...args) {
+                if (!handler) {
+                    return
+                } else if (existsFunction(handler)) {
+                    let fn = eval(handler);
+                    response = await fn.apply(this, args.length ? args : parameters);
+                } else if (handler[0] == '#') {
+                    let source = xo.sources[handler];
+                    await source.ready;
+                    source.documentElement.append(xo.xml.createNode(`<item/ >`).textContent = args.join())
+                }
+            })
+        }
     } catch (e) {
         return Promise.reject(e);
     }
+}
+
+function reloadStylesheets() {
+    xo.site.stylesheets.reload()
 }
