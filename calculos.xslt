@@ -23,8 +23,8 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="ing_grav" match="polizas/row/@iva_b" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="ing_grav" match="polizas/row/@iva_b" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 
+	<xsl:key name="iva_retenciones" match="acumulados_limites/row/@iva_r" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="ing_grav_ant" match="acumulados_limites/row/@amt_ant_i" use="concat(../@rs,'::',../@mth)"/>
-	<xsl:key name="ing_grav_ant" match="acumulados_limites/row/@amt_ant_i" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 
 	<xsl:key name="ing_grav_acum" match="acumulados_limites/row/@amt_acum_i" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="ing_grav_acum" match="acumulados_limites/row/@amt_acum_i" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
@@ -41,7 +41,8 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="iva_base_gravable_ant" match="acumulados_limites/row/@amt_ant_d" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 	<xsl:key name="iva_base_gravable_ant" match="acumulados_limites/row/@amt_ant_d" use="concat(../@rs,'::',../@mth)"/>
 
-	<xsl:key name="iva_base_gravable_isr" match="acumulados_limites/row/@amt_b" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+	<xsl:key name="iva_base_gravable_acum" match="acumulados_limites/row/@amt_acum_d" use="concat(../@rs,'::',../@mth)"/>
+
 	<xsl:key name="iva_base_gravable_isr" match="acumulados_limites/row/@amt_b" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="limite_inferior" match="acumulados_limites/row/@li" use="concat(../@rs,'::',../@mth)"/>
@@ -54,9 +55,10 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 
 	<xsl:key name="cuota" match="acumulados_limites/row/@ct" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="imp_causado" match="acumulados_limites/row/@imp_c" use="concat(../@rs,'::',../@mth)"/>
-
-	<xsl:key name="iva_base_gravable_acum" match="acumulados_limites/row/@amt_acum_d" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
-	<xsl:key name="iva_base_gravable_acum" match="acumulados_limites/row/@amt_acum_d" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="isr_retenido" match="acumulados_limites/row/@isr_r" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="imp_causado_ant_pagos_prov" match="acumulados_limites/row/@imp_cap" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="isr_pagos_provisionales" match="acumulados_limites/row/@isr_prov" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="imp_causado_2" match="acumulados_limites/row/@imp_c2" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="declaracion" match="declaraciones/row/@file" use="concat(../@rs,'::',../@mth)"/>
 
@@ -774,8 +776,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 						<tbody>
 							<tr height="34" style="mso-height-source:userset;height:45px" class="header sticky">
 								<td colspan="7" height="34" class="xl9316857" style="height:25.5pt">
-									Cálculo de IVA
-									Ejercicio <xsl:value-of select="//ejercicio/@state:selected"/>
+									Cálculo de IVA Ejercicio <xsl:value-of select="//ejercicio/@state:selected"/>
 								</td>
 								<td class="xl1516857"></td>
 								<td class="xl1516857"></td>
@@ -1096,9 +1097,12 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6516857" style="height:15.75pt">IVA Retenciones</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('impuestos',concat($rs,'::',.,'::','16'))"/>
+									<xsl:variable name="amt" select="key('iva_retenciones',concat($rs,'::',.))"/>
 									<td class="xl7616857" align="right">
-										??
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
 									</td>
 								</xsl:for-each>
 							</tr>
@@ -1167,8 +1171,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl8016857" width="364" style="height:15.75pt;width:273pt">
-									IVA
-									por Pagar despues de Acreditaciones
+									IVA por Pagar despues de Aplicaciones
 								</td>
 								<xsl:for-each select="$x-dimension">
 									<td class="xl6516857" align="right">??</td>
@@ -1577,11 +1580,9 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									<xsl:variable name="amt" select="key('limite_inferior',concat($rs,'::',.))"/>
 									<td class="xl7316857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
-										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
-											<xsl:call-template name="format">
-												<xsl:with-param name="value" select="sum($amt)"/>
-											</xsl:call-template>
-										</a>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
 									</td>
 								</xsl:for-each>
 							</tr>
@@ -1599,11 +1600,9 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									<xsl:variable name="amt" select="key('excedente_limite_inferior',concat($rs,'::',.))"/>
 									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
-										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
-											<xsl:call-template name="format">
-												<xsl:with-param name="value" select="sum($amt)"/>
-											</xsl:call-template>
-										</a>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
 									</td>
 								</xsl:for-each>
 							</tr>
@@ -1704,7 +1703,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									ISR Retenido<span style="mso-spacerun:yes"> </span>
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<td class="xl7916857" align="right">??</td>
+									<xsl:variable name="amt" select="key('isr_retenido',concat($rs,'::',.))"/>
+									<td class="xl7916857" align="right">
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
+									</td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
@@ -1718,7 +1723,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									Impuesto Causado Antes de Pagos Prov
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<td class="xl6516857" align="right">??</td>
+									<xsl:variable name="amt" select="key('imp_causado_ant_pagos_prov',concat($rs,'::',.))"/>
+									<td class="xl6516857" align="right">
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
+									</td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
@@ -1729,11 +1740,16 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl6316857" style="height:15.75pt">
-									ISR pagos
-									Provisionales<span style="mso-spacerun:yes"> </span>
+									ISR pagos Provisionales<span style="mso-spacerun:yes"> </span>
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<td class="xl6516857" align="right">??</td>
+									<xsl:variable name="amt" select="key('isr_pagos_provisionales',concat($rs,'::',.))"/>
+									<td class="xl6516857" align="right">
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
+									</td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
@@ -1747,7 +1763,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									Impuesto Causado<span style="mso-spacerun:yes"> </span>
 								</td>
 								<xsl:for-each select="$x-dimension">
-									<td class="xl6516857" align="right">??</td>
+									<xsl:variable name="amt" select="key('imp_causado_2',concat($rs,'::',.))"/>
+									<td class="xl6516857" align="right">
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<xsl:call-template name="format">
+											<xsl:with-param name="value" select="sum($amt)"/>
+										</xsl:call-template>
+									</td>
 								</xsl:for-each>
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">

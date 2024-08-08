@@ -3,6 +3,7 @@ xmlns="http://www.w3.org/1999/xhtml"
   xmlns:xo="http://panax.io/xover"
   xmlns:data="http://panax.io/data"
   xmlns:state="http://panax.io/state"
+  xmlns:datatype="http://panax.io/datatype"
   xmlns:env="http://panax.io/state/environment"
   exclude-result-prefixes="xo xsl"
 >
@@ -90,33 +91,34 @@ xmlns="http://www.w3.org/1999/xhtml"
 		</button>
 	</xsl:template>
 
-	<xsl:template match="key('data_type', 'money')">
+	<xsl:key name="datatype" match="*/@datatype:*" use="concat(.,':',local-name())"/>
+	<xsl:template match="key('data_type', 'money')|@*[key('datatype', concat('money:',name()))]">
 		<xsl:call-template name="format">
 			<xsl:with-param name="value" select="."></xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="key('data_type', 'percent')">
+	<xsl:template match="key('data_type', 'percent')|@*[key('datatype', concat('percent:',name()))]">
 		<xsl:call-template name="format-percent">
 			<xsl:with-param name="value" select="."></xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="key('data_type', 'number')">
+	<xsl:template match="key('data_type', 'number')|@*[key('datatype', concat('number:',name()))]">
 		<xsl:call-template name="format">
 			<xsl:with-param name="value" select="number(.)"></xsl:with-param>
 			<xsl:with-param name="mask">###,##0.00;-###,##0.00</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="key('data_type', 'integer')">
+	<xsl:template match="key('data_type', 'integer')|@*[key('datatype', concat('integer:',name()))]">
 		<xsl:call-template name="format">
 			<xsl:with-param name="value" select="number(.)"></xsl:with-param>
 			<xsl:with-param name="mask">###,##0;-###,##0</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="key('data_type', 'date')">
+	<xsl:template match="key('data_type', 'date')|@*[key('datatype', concat('date:',name()))]">
 		<xsl:value-of select="substring(.,1,4)"/>
 		<xsl:text>-</xsl:text>
 		<xsl:value-of select="substring(.,5,2)"/>
