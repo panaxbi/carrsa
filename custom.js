@@ -37,7 +37,6 @@ Object.defineProperty(xo.session, 'logout', {
                 xo.stores[store].remove()
             }
             xover.session.status = 'unauthorized';
-            history.go(-xo.site.position + 1);
         } catch (e) {
             Promise.reject(e);
         }
@@ -763,11 +762,10 @@ function collapse() {
 }
 
 // TODO: Quitar columna
-
-// TODO: Ordenar columnas de agrupamiento al principio
-xo.server.ws = function (url, listeners = {}) {
+xover.server.ws = function (url, listeners = {}) {
     try {
-        const socket_io = io(url, { transports: ['websocket'] });
+        if (!window.io) return;
+        const socket_io = window.io(url, { transports: ['websocket'] });
 
         for ([listener, handler] of Object.entries(listeners)) {
             socket_io.on(listener, async function (...args) {
