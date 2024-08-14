@@ -1141,10 +1141,11 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									<xsl:variable name="iva_acred" select="key('iva_acred',concat($rs,'::',.))"/>
 									<td class="xl7816857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$ing_grav"/>
-										<xsl:call-template name="format">
-											<!--<xsl:with-param name="value" select="sum($ing_grav) - sum($iva_acred)"/>-->
-											<xsl:with-param name="value" select="sum($amt)"/>
-										</xsl:call-template>
+										<a class="link" href="?total={$amt}#polizas?@razon_social={$rs}&amp;@clasificacion=28,118&amp;@fecha={.}">
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="sum($amt)"/>
+											</xsl:call-template>
+										</a>
 									</td>
 								</xsl:for-each>
 							</tr>
@@ -1171,9 +1172,11 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									<xsl:variable name="amt" select="key('iva_acreditable_periodos_anteriores',concat($rs,'::',.))"/>
 									<td class="xl7916857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
-										<xsl:call-template name="format">
-											<xsl:with-param name="value" select="sum($amt)"/>
-										</xsl:call-template>
+										<a class="link" href="?total={$amt}#polizas?@razon_social={$rs}&amp;@clasificacion=113&amp;@fecha={.}">
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="sum($amt)"/>
+											</xsl:call-template>
+										</a>
 									</td>
 								</xsl:for-each>
 							</tr>
