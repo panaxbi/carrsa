@@ -51,6 +51,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="limite_inferior" match="acumulados_limites/row/@li" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="iva_por_pagar_o_favor" match="acumulados_limites/row/@iva_pof" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="iva_por_pagar_o_favor_saldo_inicial" match="acumulados_limites/@si" use="(../row/@rs)"/>
 	<xsl:key name="iva_acreditable_periodos_anteriores" match="acumulados_limites/row/@iva_pant" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="iva_acreditable_despues_aplicaciones" match="acumulados_limites/row/@iva_papp" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="iva_remanente" match="acumulados_limites/row/@iva_rem" use="concat(../@rs,'::',../@mth)"/>
@@ -66,7 +67,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="isr_retenido" match="acumulados_limites/row/@isr_r" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="imp_causado_ant_pagos_prov" match="acumulados_limites/row/@imp_cap" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="isr_pagos_provisionales" match="acumulados_limites/row/@isr_prov" use="concat(../@rs,'::',../@mth)"/>
-	
+
 	<xsl:key name="imp_causado_2" match="acumulados_limites/row/@imp_c2" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="declaracion" match="declaraciones/row/@file" use="concat(../@rs,'::',../@mth)"/>
@@ -1132,8 +1133,11 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							</tr>
 							<tr height="21" style="mso-height-source:userset;height:15.75pt">
 								<td height="21" class="xl7716857" style="height:15.75pt">
-									IVA Por Pagar o a Favor
-									??
+									IVA Por Pagar o a Favor <xsl:call-template name="format">
+										<xsl:with-param name="value">
+											<xsl:value-of select="key('iva_por_pagar_o_favor_saldo_inicial',($rs))"/>
+										</xsl:with-param>
+									</xsl:call-template>
 								</td>
 								<xsl:for-each select="$x-dimension">
 									<xsl:variable name="amt" select="key('iva_por_pagar_o_favor',concat($rs,'::',.))"/>
