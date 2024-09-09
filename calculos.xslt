@@ -44,6 +44,8 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="iva_base_gravable_ant" match="acumulados_limites/row/@amt_ant_d" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 	<xsl:key name="iva_base_gravable_ant" match="acumulados_limites/row/@amt_ant_d" use="concat(../@rs,'::',../@mth)"/>
 
+	<xsl:key name="perdida_fiscal" match="acumulados_limites/row/@pf" use="concat(../@rs,'::',../@mth)"/>
+
 	<xsl:key name="iva_base_gravable_acum" match="acumulados_limites/row/@amt_acum_d" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="iva_base_gravable_isr" match="acumulados_limites/row/@amt_b" use="concat(../@rs,'::',../@mth)"/>
@@ -1594,6 +1596,28 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 								<xsl:for-each select="$x-dimension">
 									<xsl:variable name="amt" select="key('iva_base_gravable_acum',concat($rs,'::',.))"/>
 									<td class="xl7316857" align="right">
+										<xsl:apply-templates mode="xo:scope" select="$amt"/>
+										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
+											<xsl:call-template name="format">
+												<xsl:with-param name="value" select="sum($amt)"/>
+											</xsl:call-template>
+										</a>
+									</td>
+								</xsl:for-each>
+							</tr>
+							<tr height="21" style="mso-height-source:userset;height:15.75pt">
+								<td height="21" class="xl1516857" style="height:15.75pt"></td>
+								<xsl:for-each select="$x-dimension">
+									<xsl:variable name="amt" select="key('iva_base_gravable',concat($rs,'::',.))"/>
+									<td class="xl6516857" align="right"></td>
+								</xsl:for-each>
+							</tr>
+							<tr height="21" style="mso-height-source:userset;height:15.75pt">
+								<td height="21" class="xl6516857" style="height:15.75pt">
+									PÉRDIDA FISCAL EJERCICIOS ANTERIORES								</td>
+								<xsl:for-each select="$x-dimension">
+									<xsl:variable name="amt" select="key('perdida_fiscal',concat($rs,'::',.))"/>
+									<td class="xl6516857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<a class="link" href="?total={$amt}#diot?@razon_social={$rs}&amp;@fecha={.}">
 											<xsl:call-template name="format">
