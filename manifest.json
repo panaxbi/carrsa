@@ -9,6 +9,7 @@
     "#shell": null,
     "#login": null,
     "#loading": null,
+    "#presentacion": "templates/presentacion.html",
     "#settings": "settings.xml",
     "#menu": "menus.xml",
     "#globalization": [ "assets/globalization/headerText.${xo.session.locale.split('-').shift()}.resx", "assets/globalization/headerText.resx" ],
@@ -54,6 +55,15 @@
           "target": "@#shell main"
         }
       ]
+    },
+    "#presentacion": {
+      "stylesheets": [
+        {
+          "target": "@#shell main"
+        }
+      ],
+      "scripts": [ "./powerpoint.js", "./svg_chart.js", "./presentacion.js" ],
+      "styles": [ "./presentacion.css" ]
     },
     "server:applyPermissions": {
       "headers": {

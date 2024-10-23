@@ -68,24 +68,6 @@ xo.listener.on(['fetch', 'Response:failure'], async function ({ settings = {} })
     progress.remove();
 })
 
-Object.defineProperty(xo.session, 'login', {
-    value: async function (username, password, connection_id) {
-        try {
-            username = username instanceof HTMLElement ? username.value : username;
-            password = password instanceof HTMLElement ? xover.cryptography.encodeMD5(password.value) : password;
-            xover.session.user_login = username
-            xover.session.status = 'authorizing';
-            await xover.server.login(new URLSearchParams({ 'connection_id': connection_id }), { headers: { authorization: `Basic ${btoa(username + ':' + password)}` } }, (return_value, request) => { xo.session[`${request.url.host}:id`] = return_value.id }); //response.headers.get("x-session-id")
-            xover.session.status = 'authorized';
-            xover.stores.active.render();
-        } catch (e) {
-            xover.session.status = 'unauthorized';
-            [...document.querySelectorAll(`script[src*="accounts.google.com"]`)].remove()
-            Promise.reject(e);
-        }
-    }, writable: true, configurable: true
-})
-
 Object.defineProperty(xo.session, 'logout', {
     value: async function () {
         try {

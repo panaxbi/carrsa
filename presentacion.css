@@ -1,0 +1,61 @@
+﻿#WACViewPanel, #WACInnerFrame {
+    background-color: #f4e6e6 !important;
+}
+
+.SlideMiniature {
+    overflow: hidden;
+}
+.SlideMiniature > .SlideContent {
+    transform: scale(.1865);
+    transform-origin: 0;
+}
+/*
+.grid-frame-view-inner-container-vertical-class {
+    overflow: hidden;
+}*/
+.SlideMiniature .ShapesUnderSlide .pointer-events-none g[transform*=rotate] { /* removes some strange reflections */
+    display: none;
+}
+
+.section-list-view-visible-class {
+    overflow-x: hidden;
+}
+
+#NearPane {
+    left: 0;
+    transition: left 0.1s linear;
+}
+
+#NearPane:has(#NearPaneRegion.hidden) {
+    left: -100%;
+}
+
+#EditorContainer {
+    grid-area: 7 / 2 / -3 / -2;
+}
+
+.SlideView {
+    transition: all 0.1s linear;
+}
+
+/*:has(#NearPaneRegion.hidden)*/ .SlideView {
+    left: 0 !important;
+    top: 0 !important;
+    transform: scale(1.15) !important;
+    transform-origin: 0px 0px;
+}
+
+[xo-stylesheet="resumen.xslt"] {
+    transform: scale(.55);
+    transform-origin: 0 0;
+}
+
+#WACViewPanel:fullscreen .PageContentSizeWrapper {
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+#WACViewPanel:fullscreen .SlideView > * {
+    transform: scale(1.45);
+    transition: all 0.1s linear;
+}

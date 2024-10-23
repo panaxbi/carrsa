@@ -1,0 +1,199 @@
+﻿<model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:state="http://panax.io/state">
+	<razon_social headerText="Razón Social" xsi:type="dimension" state:selected="439" navbar:filter="default">
+		<row desc="ALEJANDRO AGUILAR HERNANDEZ" id="1" key="AUHA821018FX0" />
+		<row desc="ANDRES MINA PAYAN" id="17" key="MIPA940720H15" />
+		<row desc="AUGUSTO AMUZURRUTIA LOREDO" id="2" key="AULA541017FT1" />
+		<row desc="BEATRIZ GUADALUPE TORRES ACOSTA" id="19" key="TOAB7810177K6" />
+		<row desc="CONTROL DE CALIDAD Y LABORATOR" id="3" key="CCL1409297I1" />
+		<row desc="DAVID RAMIREZ CARDENAS" id="4" key="RACD851229GS5" />
+		<row desc="ELISA SILVA ROMO" id="5" key="SIRE611228MX0" />
+		<row desc="ESPRESSO GOURMET DE SLP S DE R" id="6" key="EGS1302151G1" />
+		<row desc="GALICIA GALVAN GRIMALDO" id="7" key="GAGG7507018D6" />
+		<row desc="GUIDO ZAMARINI DE LA GARZA" id="8" key="ZAGG5403139M4" />
+		<row desc="GUSTAVO RODRIGUEZ HERNANDEZ" id="9" key="ROHG860304PA2" />
+		<row desc="HECTOR REYES FORTANELLI" id="21" key="REFH581225DQ4" />
+		<row desc="HECTOR ZAMUDIO GONZALEZ" id="10" key="ZAGH681027L14" />
+		<row desc="HUGO FEDERICO ZUNIGA MANCILLA" id="11" key="ZUMH720715MBA" />
+		<row desc="HUL HERRAMIENTAS UNIVERSALES L" id="12" key="HHU130315IU1" />
+		<row desc="ILSE BERENICE ORTIZ IZAGUIRRE" id="13" key="OIII950512DT6" />
+		<row desc="JORGE ADOLFO MAURICIO STAHL PA" id="14" key="SAPJ910927CP1" />
+		<row desc="JOSE FRANCISCO GOMEZ FERRER" id="15" key="GOFF631004299" />
+		<row desc="PARQUE DE RECICLAJE INDUSTRIAL SIRG" id="439" key="PRI200212PI3" />
+		<row desc="RAFAEL ALVARADO JIMENEZ" id="16" key="AAJR711027D16" />
+	</razon_social>
+	<ejercicio xsi:type="dimension" navbar:filter="default" state:selected="2024">
+		<row desc="2020" key="2020" />
+		<row desc="2021" key="2021" />
+		<row desc="2022" key="2022" />
+		<row desc="2023" key="2023" />
+		<row desc="2024" key="2024" />
+	</ejercicio>
+	<meses xsi:type="dimension">
+		<row year="2024" key="202401" month="1" month_desc="Enero" />
+		<row year="2024" key="202402" month="2" month_desc="Febrero" />
+		<row year="2024" key="202403" month="3" month_desc="Marzo" />
+		<row year="2024" key="202404" month="4" month_desc="Abril" />
+		<row year="2024" key="202405" month="5" month_desc="Mayo" />
+		<row year="2024" key="202406" month="6" month_desc="Junio" />
+		<row year="2024" key="202407" month="7" month_desc="Julio" />
+		<row year="2024" key="202408" month="8" month_desc="Agosto" />
+		<row year="2024" key="202409" month="9" month_desc="Septiembre" />
+	</meses>
+	<clasificacion xsi:type="dimension">
+		<row desc="ND" id="-1" />
+		<row desc="Ingresos totales bancos" id="1" cve="12" />
+		<row desc="Caja" id="2" cve="11" />
+		<row desc="Devoluciones" id="3" cve="12D" />
+		<row desc="Traspaso entre cuentas" id="4" cve="12T" />
+		<row desc="Prestamos" id="5" cve="12P" />
+		<row desc="Otros que no gravan" id="6" cve="12ONG" />
+		<row desc="IVA por pagar" id="7" cve="28" />
+		<row desc="Clientes" id="8" cve="15" />
+		<row desc="Anticipo de clientes" id="9" cve="261" />
+		<row desc="Ventas" id="10" cve="41" />
+		<row desc="Retenciones" id="11" cve="12R" />
+		<row desc="IVA Retenciones" id="12" cve="113IVA" />
+		<row desc="ISR Retenciones" id="13" cve="113ISR" />
+		<row desc="Deposito Inv. Patrimonial" id="14" cve="12DIP" />
+		<row desc="Depreciaciones" id="15" cve="613" />
+		<row desc="Tarjetas" id="16" cve="217" />
+		<row desc="No deducible" id="17" cve="61ND" />
+		<row desc="SIPARE" id="18" cve="211" />
+		<row desc="Depósito en garantía" id="19" cve="184DG" />
+		<row desc="Nómina" id="20" cve="21N" />
+		<row desc="IVA por pagar" id="21" cve="213" />
+		<row desc="3% sobre nómina" id="22" cve="212" />
+		<row desc="Pagos provisionales" id="23" cve="114" />
+		<row desc="Retenciones servicios" id="24" cve="216SRV" />
+		<row desc="Retenciones sueldos" id="25" cve="216SDO" />
+		<row desc="Fondos inversion" id="26" />
+		<row desc="IVA acreditable" id="27" cve="119IA" />
+		<row desc="IVA retenido" id="28" />
+		<row desc="IVA por pagar" id="29" cve="29" />
+		<row desc="IVA retenido por compras" id="30" cve="216IRC" />
+	</clasificacion>
+	<ingresos_egresos xsi:type="fact" state:dd="2024-09-26T01:18:26.733">
+		<row rs="439" mth="202402" cl="119IA" amt="-421413.4900" />
+		<row rs="439" mth="202403" cl="11" amt="-38920.7300" />
+		<row rs="439" mth="202403" cl="61ND" amt="5501.0000" />
+		<row rs="439" mth="202406" cl="212" amt="21584.0000" />
+		<row rs="439" mth="202403" cl="12" amt="-1963745.9300" />
+		<row rs="439" mth="202403" cl="29" amt="258557.0900" />
+		<row rs="439" mth="202402" cl="12" amt="4377909.8700" />
+		<row rs="439" mth="202405" cl="114" amt="8103.0000" />
+		<row rs="439" mth="202401" cl="11" amt="-60766.5200" />
+		<row rs="439" mth="202405" cl="29" amt="553806.9800" />
+		<row rs="439" mth="202402" cl="21N" amt="497711.0900" />
+		<row rs="439" mth="202405" cl="12" amt="-3818055.2900" />
+		<row rs="439" mth="202402" cl="217" amt="-10191.0100" />
+		<row rs="439" mth="202402" cl="211" amt="133979.7100" />
+		<row rs="439" mth="202404" cl="29" amt="326008.6700" />
+		<row rs="439" mth="202403" cl="21N" amt="576377.8200" />
+		<row rs="439" mth="202404" cl="12" amt="-4475606.2700" />
+		<row rs="439" mth="202401" cl="113IVA" amt="-177736.3800" />
+		<row rs="439" mth="202402" cl="213" amt="128985.0000" />
+		<row rs="439" mth="202401" cl="217" amt="-39869.7500" />
+		<row rs="439" mth="202401" cl="211" amt="250261.7900" />
+		<row rs="439" mth="202406" cl="61ND" amt="1076.2400" />
+		<row rs="439" mth="202401" cl="119IA" amt="-208578.6700" />
+		<row rs="439" mth="202403" cl="12" amt="2076286.9900" />
+		<row rs="439" mth="202402" cl="29" amt="579609.4100" />
+		<row rs="439" mth="202402" cl="11" amt="-64262.4000" />
+		<row rs="439" mth="202405" cl="212" amt="58373.0000" />
+		<row rs="439" mth="202401" cl="12" amt="7068409.8400" />
+		<row rs="439" mth="202406" cl="11" amt="0.0100" />
+		<row rs="439" mth="202405" cl="216SRV" amt="24.0000" />
+		<row rs="439" mth="202404" cl="61ND" amt="481.0900" />
+		<row rs="439" mth="202401" cl="21N" amt="425626.4300" />
+		<row rs="439" mth="202406" cl="12" amt="-3898383.7200" />
+		<row rs="439" mth="202402" cl="216SDO" amt="100539.0000" />
+		<row rs="439" mth="202404" cl="216SDO" amt="51307.0000" />
+		<row rs="439" mth="202402" cl="216" amt="20186.7100" />
+		<row rs="439" mth="202406" cl="11" amt="-34154.6000" />
+		<row rs="439" mth="202402" cl="114" amt="34160.0000" />
+		<row rs="439" mth="202402" cl="113IVA" amt="-262713.7500" />
+		<row rs="439" mth="202401" cl="216" amt="7290.9800" />
+		<row rs="439" mth="202405" cl="113IVA" amt="-342646.0700" />
+		<row rs="439" mth="202402" cl="61ND" amt="0.4800" />
+		<row rs="439" mth="202406" cl="29" amt="539348.5800" />
+		<row rs="439" mth="202402" cl="212" amt="20893.0000" />
+		<row rs="439" mth="202403" cl="216" amt="8259.1800" />
+		<row rs="439" mth="202405" cl="11" amt="-78843.9800" />
+		<row rs="439" mth="202404" cl="113IVA" amt="-170622.8000" />
+		<row rs="439" mth="202406" cl="216SDO" amt="46572.0000" />
+		<row rs="439" mth="202401" cl="61ND" amt="2216.9800" />
+		<row rs="439" mth="202401" cl="212" amt="54910.0000" />
+		<row rs="439" mth="202404" cl="11" amt="-61429.6700" />
+		<row rs="439" mth="202404" cl="216" amt="20461.7100" />
+		<row rs="439" mth="202403" cl="113IVA" amt="-158832.3100" />
+		<row rs="439" mth="202405" cl="216SDO" amt="107726.0000" />
+		<row rs="439" mth="202406" cl="12" amt="3898042.5600" />
+		<row rs="439" mth="202401" cl="11" amt="0.4800" />
+		<row rs="439" mth="202404" cl="21N" amt="434548.6700" />
+		<row rs="439" mth="202404" cl="211" amt="282107.4100" />
+		<row rs="439" mth="202404" cl="113" amt="154772.3200" />
+		<row rs="439" mth="202406" cl="119IA" amt="-370743.5400" />
+		<row rs="439" mth="202405" cl="211" amt="424710.3500" />
+		<row rs="439" mth="202405" cl="119IA" amt="-329464.5100" />
+		<row rs="439" mth="202404" cl="11" amt="0.2400" />
+		<row rs="439" mth="202406" cl="21N" amt="418099.7600" />
+		<row rs="439" mth="202404" cl="119IA" amt="-447897.4400" />
+		<row rs="439" mth="202401" cl="29" amt="358931.0000" />
+		<row rs="439" mth="202402" cl="12" amt="-4266886.2300" />
+		<row rs="439" mth="202402" cl="216SRV" amt="141.0000" />
+		<row rs="439" mth="202405" cl="12" amt="4289145.1500" />
+		<row rs="439" mth="202401" cl="12" amt="-7006507.3600" />
+		<row rs="439" mth="202403" cl="119IA" amt="-123427.6800" />
+		<row rs="439" mth="202405" cl="21N" amt="488750.2700" />
+		<row rs="439" mth="202404" cl="12" amt="4107578.1600" />
+		<row rs="439" mth="202402" cl="11" amt="1206.4000" />
+		<row rs="439" mth="202406" cl="217" amt="-4083.1600" />
+		<row rs="439" mth="202406" cl="211" amt="125604.9400" />
+	</ingresos_egresos>
+	<impuestos xsi:type="fact" state:dd="2024-09-26T01:18:26.733">
+		<row rs="439" mth="202404" cl="212" amt="-18633.0000" />
+		<row rs="439" mth="202402" cl="213" amt="-157738.9900" />
+		<row rs="439" mth="202405" cl="213" amt="-39689.0100" />
+		<row rs="439" mth="202403" cl="216SRV" amt="-24.3800" />
+		<row rs="439" mth="202406" cl="216SRV" amt="-1006.4400" />
+		<row rs="439" mth="202401" cl="212" amt="-20893.0000" />
+		<row rs="439" mth="202401" cl="213" amt="-73986.2100" />
+		<row rs="439" mth="202402" cl="216SRV" amt="-59.8900" />
+		<row rs="439" mth="202402" cl="212" amt="-19327.0000" />
+		<row rs="439" mth="202405" cl="216SRV" amt="-260.6300" />
+		<row rs="439" mth="202408" cl="216SRV" amt="-546.8800" />
+		<row rs="439" mth="202403" cl="212" amt="-20413.0000" />
+		<row rs="439" mth="202403" cl="213" amt="-14559.9100" />
+		<row rs="439" mth="202404" cl="216SRV" amt="-306.3800" />
+		<row rs="439" mth="202407" cl="216SRV" amt="-1061.6300" />
+	</impuestos>
+	<iva xsi:type="fact" state:dd="2024-09-26T01:18:26.733">
+		<row rs="439" mth="202401" cl="113IVA" amt="-177736.3800" />
+		<row rs="439" mth="202402" cl="113IVA" amt="-262713.7500" />
+		<row rs="439" mth="202403" cl="113IVA" amt="-158832.3100" />
+		<row rs="439" mth="202404" cl="113IVA" amt="-170622.8000" />
+		<row rs="439" mth="202405" cl="113IVA" amt="-342646.0700" />
+		<row rs="439" mth="202401" cl="29" amt="358931.0000" />
+		<row rs="439" mth="202402" cl="29" amt="579609.4100" />
+		<row rs="439" mth="202403" cl="29" amt="258557.0900" />
+		<row rs="439" mth="202404" cl="29" amt="326008.6700" />
+		<row rs="439" mth="202405" cl="29" amt="553806.9800" />
+		<row rs="439" mth="202406" cl="29" amt="539348.5800" />
+	</iva>
+	<ventas xsi:type="fact" state:dd="2024-09-26T01:18:26.733">
+		<row rs="439" mth="202401" cl="41" amt="-2645443.5000" />
+		<row rs="439" mth="202402" cl="41" amt="-2572280.1900" />
+		<row rs="439" mth="202403" cl="41" amt="-2084273.0900" />
+		<row rs="439" mth="202404" cl="41" amt="-2338657.4400" />
+		<row rs="439" mth="202405" cl="41" amt="-3693805.0100" />
+		<row rs="439" mth="202406" cl="41" amt="-3308189.6000" />
+		<row rs="439" mth="202407" cl="41" amt="-2982326.2000" />
+		<row rs="439" mth="202408" cl="41" amt="-3603711.8100" />
+	</ventas>
+	<sipare xsi:type="fact" state:dd="2024-09-26T01:18:26.733">
+		<row rs="439" mth="202401" cl="211" amt="-133979.7100" />
+		<row rs="439" mth="202402" cl="211" amt="-282563.1000" />
+		<row rs="439" mth="202403" cl="211" amt="-147659.1500" />
+		<row rs="439" mth="202404" cl="211" amt="-276595.5100" />
+	</sipare>
+</model>
