@@ -437,25 +437,29 @@ footer {
     transform: scale(1);
 }
 /*---------------------------------------------------------------------*/
+body:has(:scope > iframe) {
+    height: 100vh;
+}
+
 iframe {
     display: block;
     border: none;
-    height: 100vh;
-    width: 100vw;
-    resize: both;
+    min-height: 100%;
+    max-height: 100%;
+    width: 100%;
 }
 
-    dialog > * {
-        margin: 0 0 0.5rem 0;
-    }
+dialog > * {
+    margin: 0 0 0.5rem 0;
+}
 
-    dialog::-webkit-backdrop {
-        background: rgba(0, 0, 0, 0.4);
-    }
+dialog::-webkit-backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
 
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.4);
-    }
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
 
 form {
     display: grid;
