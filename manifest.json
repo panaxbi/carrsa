@@ -10,6 +10,7 @@
     "#login": null,
     "#loading": null,
     "#presentacion": "templates/presentacion.html",
+    "#resumen": "templates/resumen.htm",
     "#settings": "settings.xml",
     "#menu": "menus.xml",
     "#globalization": [ "assets/globalization/headerText.${xo.session.locale.split('-').shift()}.resx", "assets/globalization/headerText.resx" ],
