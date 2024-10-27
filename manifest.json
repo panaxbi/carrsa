@@ -9,7 +9,7 @@
     "#shell": null,
     "#login": null,
     "#loading": null,
-    "#presentacion": "templates/presentacion.html",
+    "#presentacion": "presentacion.html",
     "#resumen": "templates/resumen.htm",
     "#settings": "settings.xml",
     "#menu": "menus.xml",

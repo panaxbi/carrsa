@@ -11,8 +11,14 @@ function getPrecedingSiblingsWithClass(element, selector) {
 
     return siblings;
 }
+
+[...document.querySelectorAll(`form[action*="javascript:void(0)"] button.pptonline-thumbnail-panel-toggle-button`)].forEach(el => el.setAttribute("onclick", `closest('#NearPaneRegion').classList.toggle('hidden')`));
+
+[...document.querySelectorAll(`[onload]`)].forEach(el => el.removeAttribute("onload"));
+[...document.querySelectorAll(`[onerror]`)].forEach(el => el.removeAttribute("onerror"));
+
 if (document.querySelector(`form[action*="live.com"]`)) {
-    [...document.querySelectorAll(`body > :not([id="applicationOuterContainer"]),iframe,link[href^=http],link[href*=download],script,#regionComposerRoot > *,.ShapeSelectionOverlay,.CommentsOverlay,.AnimationMarkersOverlay,.ShapeMoveHandle,.GrippersContainer,#PageViewHiddenLabel,svg:has(.ShapeMoveHandle)`), document.querySelectorAll(`#WACInnerFrame`)[1]].filter(el => el && !["EditorContainer", "NearPane"].includes(el.id)).forEach(el => el.remove());
+    [...document.querySelectorAll(`body > :not([id="applicationOuterContainer"]),iframe,link[href^=http],link[href*=download],script,#regionComposerRoot > *,.ShapeSelectionOverlay,.CommentsOverlay,.AnimationMarkersOverlay,.ShapeMoveHandle,.GrippersContainer,#PageViewHiddenLabel`), document.querySelectorAll(`#WACInnerFrame`)[1]].filter(el => el && !["EditorContainer", "NearPane"].includes(el.id)).forEach(el => el.remove());
 
     [...document.querySelectorAll(`form[action*="live.com"]`)].forEach(el => el.setAttributeNS(null, 'action', 'javascript:void(0);'));
 
@@ -24,14 +30,13 @@ if (document.querySelector(`form[action*="live.com"]`)) {
     image.setAttribute("href", `./media/image${ix}.jpeg`);
     image.setAttribute("onerror", `let href = this.getAttribute("href"); href.indexOf(".jpeg") != -1 && this.setAttribute("href",href.replace(".jpeg", ".png"))`);
 });
+
 function activateSlide(ix) {
     ix = !isNaN(Number(ix)) ? ix : [...document.querySelectorAll('.content-image-view-visible-class')].findIndex(el => el == this);
     document.querySelectorAll('.PageContentSizeWrapper').forEach(wrapper => wrapper.style.display = 'none');
     document.querySelectorAll('.PageContentSizeWrapper')[ix].style.display = 'inherit'
     document.querySelectorAll(`.grid-frame-view-visible-class`).forEach(wrapper => wrapper.classList.remove("grid-frame-view-selected-class"));
     document.querySelectorAll(`.grid-frame-view-visible-class`)[ix].classList.add("grid-frame-view-selected-class");
-
-    document.querySelector(`button.pptonline-thumbnail-panel-toggle-button`).setAttribute("onclick", `closest('#NearPaneRegion').classList.toggle('hidden')`)
 }
 
 for (let img of document.querySelectorAll('.content-image-view-visible-class')) {
@@ -104,3 +109,32 @@ document.addEventListener('wheel', function (event) {
 
 
 setTimeout(() => [...document.querySelectorAll(`image[onerror]`)].forEach(image => image.removeAttribute("onerror")), 5000);
+
+function getDescendantNodes(targetNode, nodeFilter = NodeFilter.SHOW_ELEMENT) {
+    const nodeIterator = document.createNodeIterator(
+        targetNode,
+        nodeFilter // Include all node types: element, text, etc.
+    );
+
+    const descendantsArray = [];
+    let currentNode;
+    while (currentNode = nodeIterator.nextNode()) {
+        descendantsArray.push(currentNode);
+    }
+    return descendantsArray
+}
+
+getDescendantNodes(document, NodeFilter.SHOW_TEXT).filter(text => text.data.match(/\{\{/) && !text.data.match(/\}\}/)).map(text => {
+    let group = text.parentElement.closest(`span.TextRun`)
+    text.data = group.textContent;
+    if (group.classList.contains("SpellingErrorZoomed")) {
+        group.classList.remove("SpellingErrorZoomed");
+        [...group.querySelectorAll("span")].slice(1).forEach(el => el.remove())
+    }
+    while (group.nextElementSibling && !group.nextElementSibling.matches('.EOP') && !group.textContent.match(/\}\}/)) {
+        text.data = group.textContent;
+        text.data += group.nextElementSibling.textContent
+        group.nextElementSibling.remove()
+    }
+    return text
+})
