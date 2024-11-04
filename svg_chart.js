@@ -72,10 +72,12 @@ function updateDataPoints(dataPoints, labels, chartDimensions) {
 
     // Plot circles for each data point
     let circles = "";
-    for (let i = 0; i < dataPoints.length; i++) {
-        const x = xStart + i * xStep;
-        const y = mapValueToY(dataPoints[i], minValue, maxValue, yStart, yEnd);
-        circles += `<circle cx="${x}" cy="${y}" r="4" fill="current" class="${paths[3].getAttribute("class")}"></circle>`;
+    if (paths[3] && paths[3].getAttribute) {
+        for (let i = 0; i < dataPoints.length; i++) {
+            const x = xStart + i * xStep;
+            const y = mapValueToY(dataPoints[i], minValue, maxValue, yStart, yEnd);
+            circles += `<circle cx="${x}" cy="${y}" r="4" fill="current" class="${paths[3].getAttribute("class")}"></circle>`;
+        }
     }
 
     // Append the path and data points to the chart's SVG
@@ -117,7 +119,7 @@ function updateChart(axisLabels, dataPoints) {
         maxAmount = maxAmount * 2;
         minAmount = 0;
     } else {
-        minAmount = Math.floor(minAmount - (diff / 2) );
+        minAmount = Math.floor(minAmount - (diff / 2));
         maxAmount = Math.ceil(maxAmount + (diff / 2));
     }
 

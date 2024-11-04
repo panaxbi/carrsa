@@ -33,8 +33,8 @@ xo.listener.on('progress', async function ({ percent }) {
 })
 
 xo.listener.on(['beforeRender::#shell.xslt', 'beforeAppendTo::main', 'beforeAppendTo::body'], function ({ target }) {
-    if (!(event.detail.args || []).filter(el => !(el instanceof Comment || el instanceof HTMLStyleElement || el instanceof HTMLScriptElement || el.matches("dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar]"))).length) return;
-    [...target.childNodes].filter(el => el.matches && !el.matches(`script,dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar]`)).removeAll()
+    if (!(event.detail.args || []).filter(el => !(el instanceof Comment || el instanceof HTMLStyleElement || el instanceof HTMLScriptElement || el.matches("dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar],[role=complementary]"))).length) return;
+    [...target.childNodes].filter(el => el.matches && !el.matches(`slot,script,dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar],[role=complementary]`)).removeAll()
 })
 
 xo.listener.on('set::fecha/@state:checked', function ({ value, event }) {
@@ -498,23 +498,23 @@ xo.listener.on(['append::dialog[open]'], function () {
     this.showModal()
 })
 
-xo.listener.on(`input::input[type=search]`, function (event) {
-    const input = this;
-    clearTimeout(input.search_timeout);
-    this.search_timeout = setTimeout(() => {
-        //let scope = input.scope;
-        //scope.value = input.value;
-        let search_text = input.value;//this.documentElement.getAttribute("state:filter");
-        let inverted = search_text[0] == '!';
-        search_text = search_text.replace(/^\!/, '');
-        let records = this.closest('table,form').select(`.//tr/@desc_poliza|.//select/option/text()`)
-        records.forEach(record => record.parentNode.classList.remove('hidden'));
-        for (let attr of records.filter(desc => inverted !== !desc.value.match(new RegExp(search_text, "ig")))) {
-            attr.parentNode.classList.add('hidden')
-        }
-        clearTimeout(input.search_timeout);
-    }, 100);
-});
+//xo.listener.on(`input::input[type=search]`, function (event) {
+//    const input = this;
+//    clearTimeout(input.search_timeout);
+//    this.search_timeout = setTimeout(() => {
+//        //let scope = input.scope;
+//        //scope.value = input.value;
+//        let search_text = input.value;//this.documentElement.getAttribute("state:filter");
+//        let inverted = search_text[0] == '!';
+//        search_text = search_text.replace(/^\!/, '');
+//        let records = this.closest('table,form,body').select(`.//tr/@desc_poliza|.//select/option/text()`)
+//        records.forEach(record => record.parentNode.classList.remove('hidden'));
+//        for (let attr of records.filter(desc => inverted !== !desc.value.match(new RegExp(search_text, "ig")))) {
+//            attr.parentNode.classList.add('hidden')
+//        }
+//        clearTimeout(input.search_timeout);
+//    }, 100);
+//});
 
 xo.listener.on(`change::@state:date`, function ({ value, event }) {
     let srcElement = event.srcElement;
@@ -650,6 +650,10 @@ xo.listener.on("fetch::#detalle_gastos_operativos|#detalle_ingresos_operativos|#
     if (xo.site.searchParams.params.size) {
         debugger
     }
+})
+
+xo.listener.on("fetch::#presentacion", function ({ document }) {
+    document.select(`model/razon_social/*[not(@id=//data//@rs)]`).remove()
 })
 
 xo.listener.on(["fetch"], function ({ document }) {

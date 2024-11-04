@@ -37,6 +37,7 @@ function activateSlide(ix) {
     document.querySelectorAll('.PageContentSizeWrapper')[ix].style.display = 'inherit'
     document.querySelectorAll(`.grid-frame-view-visible-class`).forEach(wrapper => wrapper.classList.remove("grid-frame-view-selected-class"));
     document.querySelectorAll(`.grid-frame-view-visible-class`)[ix].classList.add("grid-frame-view-selected-class");
+    document.activeSlide = ix;
 }
 
 for (let img of document.querySelectorAll('.content-image-view-visible-class')) {
@@ -49,12 +50,19 @@ for (let slide of document.querySelectorAll('#WACViewPanel')) {
     })
 }
 
-var currentSlideIndex = 0;
+var currentSlideIndex = document.activeSlide || 0;
+
+Object.defineProperty(document, 'activeSlide', {
+    get: function () {
+        return [...document.querySelectorAll('.PageContentSizeWrapper')].findIndex(wrapper => wrapper.style.display != 'none')
+    }
+})
+
 function toggleFullscreen(silde) {
     if (document.exitFullscreen && document.fullscreenElement) {
         document.exitFullscreen();
     } else {
-        currentSlideIndex = [...document.querySelectorAll('.PageContentSizeWrapper')].findIndex(wrapper => wrapper.style.display != 'none');
+        currentSlideIndex = document.activeSlide;
         silde.requestFullscreen();
     }
 }

@@ -43,6 +43,9 @@ formatDate = function (date) {
 //xo.listener.on(['beforeFetch?request'], async function ({ settings = {} }) {
 //    settings.progress = xo.sources["loading.xslt"].render()
 //})
+xo.listener.on(['append::main slot[xo-source][xo-stylesheet]'], function ({ target }) {
+    [...target.children].filter(el => el != this && el.matches && !el.matches(`script,dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar],[role=complementary]`)).removeAll()
+})
 
 xo.listener.on(`fetch::model[*[@xsi:type="dimension"]]`, function ({ document }) {
     let dimensions = {};

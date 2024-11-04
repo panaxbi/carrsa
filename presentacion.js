@@ -1,15 +1,20 @@
-(async () => {
+async function initPresentation() {
     try {
         for (let image of document.querySelectorAll(`#WACViewPanel image[href*="./presentacion_files/media/image5.png"]`)) {
+            activateSlide(0)
             let target = image.closest('div');
             target.setAttribute("xo-stylesheet", "resumen.xslt");
             await target.render();
         }
-        activateSlide(4)
-        let informe = xover.sources["presentacion.xml"];
+        let informe = xover.stores["#presentacion"];
         await informe.ready;
-        await xover.evaluateReferencers.call(document, function (key) {
-            let value = informe.single(`model/data/row`).single(key) || `{{${key}}}`;
+        let row = informe.single(`//data/*[@rs=//razon_social/@state:selected][@month=//meses/@state:selected]`) || informe.single(`*`);
+        if (!row) {
+            return Promise.reject(new Error('Información no disponible'));
+        }
+
+        await xover.evaluateReferencers.call(document, function (match, key) {
+            let value = row.single(key) || `{{${key}}}`;
             if (!["año"].includes(value.name) && !isNaN(value.toString())) {
                 value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
             }
@@ -29,4 +34,8 @@
     } catch (error) {
         console.error('Error:', error);
     }
-})(); 
+}
+
+top.window.initPresentation = initPresentation;
+initPresentation()
+xover.listener.on(`change::model/*[@xsi:type="dimension"]/@state:selected`, initPresentation)

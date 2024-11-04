@@ -1,4 +1,5 @@
-﻿<model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state">
+﻿<?xml-stylesheet type="text/xsl" href="presentacion.xslt" target="@#shell main"?>
+<model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state">
 	<razon_social xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" xsi:type="dimension" navbar:filter="default">
 		<row desc="ACCESORIOS LAES SAS" id="24" key="ALA200127AK3" />
 		<row desc="ACCESTECHDOCKS SA DE CV" id="25" key="ACC221125M56" />
@@ -326,7 +327,7 @@
 		<row desc="VICTOR MANUEL TORRES SALINAS JIMENE" id="364" key="TOJV8307184C0" />
 		<row desc="YOLANDA HURTADO MELGOZA" id="365" key="HUMY5205048M4" />
 	</razon_social>
-	<ejercicio xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" xsi:type="dimension" navbar:filter="default" state:selected="2024">
+	<ejercicio xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" xsi:type="dimension">
 		<row desc="2010" key="2010" />
 		<row desc="2011" key="2011" />
 		<row desc="2012" key="2012" />
@@ -343,17 +344,17 @@
 		<row desc="2023" key="2023" />
 		<row desc="2024" key="2024" />
 	</ejercicio>
-	<meses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" xsi:type="dimension">
-		<row year="2024" key="202401" month="1" month_desc="Enero" />
-		<row year="2024" key="202402" month="2" month_desc="Febrero" />
-		<row year="2024" key="202403" month="3" month_desc="Marzo" />
-		<row year="2024" key="202404" month="4" month_desc="Abril" />
-		<row year="2024" key="202405" month="5" month_desc="Mayo" />
-		<row year="2024" key="202406" month="6" month_desc="Junio" />
-		<row year="2024" key="202407" month="7" month_desc="Julio" />
-		<row year="2024" key="202408" month="8" month_desc="Agosto" />
-		<row year="2024" key="202409" month="9" month_desc="Septiembre" />
-		<row year="2024" key="202410" month="10" month_desc="Octubre" />
+	<meses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" xsi:type="dimension" navbar:filter="default" state:selected="202403">
+		<row year="2024" key="202401" month="1" desc="2024 Enero" />
+		<row year="2024" key="202402" month="2" desc="2024 Febrero" />
+		<row year="2024" key="202403" month="3" desc="2024 Marzo" />
+		<row year="2024" key="202404" month="4" desc="2024 Abril" />
+		<row year="2024" key="202405" month="5" desc="2024 Mayo" />
+		<row year="2024" key="202406" month="6" desc="2024 Junio" />
+		<row year="2024" key="202407" month="7" desc="2024 Julio" />
+		<row year="2024" key="202408" month="8" desc="2024 Agosto" />
+		<row year="2024" key="202409" month="9" desc="2024 Septiembre" />
+		<row year="2024" key="202410" month="10" desc="2024 Octubre" />
 	</meses>
 	<data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" state:record_count="988" state:data_date="2024-10-25T12:02:31.377">
 		<row xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:navbar="http://widgets.panaxbi.com/navbar" xmlns:total="http://panax.io/total" xmlns:type="http://panax.io/datatype" xmlns:state="http://panax.io/state" año="2024" month="202401" mes="Enero" rs="1" cliente="ALEJANDRO AGUILAR HERNANDEZ" tipo_persona="PERSONA FÍSICA" caja_ingresos="8038.2100" caja_egresos="8035.0000" banco_ingresos="0.0000" banco_egresos="0.0000" tarjetas_egresos="0.0000" otros_no_gravan_i="0" otros_no_gravan_e="0" base_grav_c_ret_i="0" base_grav_s_ret_i="0" base_grav_cero_i="0" base_grav_16_i="0" no_deducibles="0.0000" sipare_egresos="0.0000" concepto_caja_e="0.0000" dep_en_garantia="0" devoluciones="0" nomina="0.0000" iva_pagar_e="0.0000" tres_sobre_nom="0.0000" pagos_prov="0.0000" ret_servicios="0.0000" ret_sueldos="0.0000" fondos_inversion="0" iva_pagar_i="0.0000" iva_acreditable="425.5200" iva_retenido="0.0000" iva_ret_compras_i="0" isr="0" isr_ret="0.0000" isr_nomina="0.0000" iva_ret="0.0000" tasa_nomina="0.0000" isr_ret_salarios="0.0000" iva_ret_compras="0.0000" iva_acred="425.5200" ingresos="0" ingresos_acum="0" coeficiente_utilidad="0" base_gravable="0" tasa="0" pago_anterior="0" ventas="8038.2100" isr_ret_sal="0" sipare="0.0000" total_ingresos="8038.2100" total_egresos="8035.0000" ingresos_gravados="8038.2100" egresos_gravados="8035.0000" total_final_egresos="425.5200" total_final_ingresos="0.0000" iva="-425.5200" iva_pagar="-425.5200">
