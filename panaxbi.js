@@ -40,12 +40,14 @@ var datediff = function (intervalType, first_date, last_date = new Date()) {
 formatDate = function (date) {
     return new Date((date instanceof Date) && date || Date.parse(`${date}T00:00:00`.replace(/(\d{4})-?(\d{2})-?(\d{2})T/, '$1-$2-$3T')))
 }
-//xo.listener.on(['beforeFetch?request'], async function ({ settings = {} }) {
-//    settings.progress = xo.sources["loading.xslt"].render()
-//})
-xo.listener.on(['append::main slot[xo-source][xo-stylesheet]'], function ({ target }) {
-    [...target.children].filter(el => el != this && el.matches && !el.matches(`script,dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar],[role=complementary]`)).removeAll()
+
+xo.listener.on(['append::main > :not(slot)[xo-source][xo-stylesheet], body > :not(slot)[xo-source][xo-stylesheet]'], function ({ target }) {
+    [...target.children].filter(el => el != this && el.matches && !el.matches(`slot,script,dialog,[role=alertdialog],[role=alert],[role=dialog],[role=status],[role=progressbar],[role=complementary]`)).removeAll()
 })
+/*
+xo.listener.on(['append::html:*[.//@style[contains(.,"view-transition-name")]]'], function ({ target, element }) {
+    debugger
+})*/
 
 xo.listener.on(`fetch::model[*[@xsi:type="dimension"]]`, function ({ document }) {
     let dimensions = {};
