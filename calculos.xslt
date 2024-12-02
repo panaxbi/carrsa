@@ -21,14 +21,18 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@rs,'::',substring(../@mth,1,4),'::',../@cl)"/>
 	<xsl:key name="amt" match="polizas/row/@amt" use="concat(../@rs,'::',../@mth,'::',substring(../@cl,1,2))"/>
 
-	<xsl:key name="sueldos" match="polizas/row[@cl='601']/@amt" use="concat(../@rs,'::',../@mth)"/>
-	<xsl:key name="depreciaciones" match="polizas/row[@cl='613']/@amt" use="concat(../@rs,'::',../@mth)"/>
+	<!--<xsl:key name="sueldos" match="polizas/row[@cl='601']/@amt" use="concat(../@rs,'::',../@mth)"/>-->
+	<!--<xsl:key name="depreciaciones" match="polizas/row[@cl='613']/@amt" use="concat(../@rs,'::',../@mth)"/>-->
+	<xsl:key name="depreciaciones" match="acumulados_limites/row/@dep" use="concat(../@rs,'::',../@mth)"/>
+	<xsl:key name="sueldos" match="acumulados_limites/row/@sdo_sal" use="concat(../@rs,'::',../@mth)"/>
 
 	<xsl:key name="tasas_iva" match="row/@iva_t" use="concat(name(../..),':',.)"/>
 	<xsl:key name="tasas_iva" match="row/@iva_t" use="concat(name(../..),':','*')"/>
 
 	<xsl:key name="ing_grav" match="polizas/row/@iva_b" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="ing_grav" match="polizas/row/@iva_b" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
+
+	<xsl:key name="iva" match="polizas/row/@iva" use="concat(../@rs,'::',../@mth,'::',../@iva_t)"/>
 
 	<xsl:key name="iva_retenciones" match="acumulados_limites/row/@iva_r" use="concat(../@rs,'::',../@mth)"/>
 	<xsl:key name="ing_grav_ant" match="acumulados_limites/row/@amt_ant_i" use="concat(../@rs,'::',../@mth)"/>
@@ -1629,11 +1633,12 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 							<tr height="20" style="height:15.0pt">
 								<td height="20" class="xl7216857" style="height:15.0pt">IVA POR PAGAR 16%</td>
 								<xsl:for-each select="$x-dimension">
-									<xsl:variable name="amt" select="key('ing_grav',concat($rs,'::',.,'::','16.0000'))"/>
+									<!--<xsl:variable name="amt" select="key('ing_grav',concat($rs,'::',.,'::','16.0000'))"/>-->
+									<xsl:variable name="amt" select="key('iva',concat($rs,'::',.,'::','16.0000'))"/>
 									<td class="xl7316857" align="right">
 										<xsl:apply-templates mode="xo:scope" select="$amt"/>
 										<xsl:call-template name="format">
-											<xsl:with-param name="value" select="sum($amt) * 0.16"/>
+											<xsl:with-param name="value" select="sum($amt)"/>
 										</xsl:call-template>
 									</td>
 								</xsl:for-each>
@@ -2421,7 +2426,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 									<tr height="21" style="mso-height-source:userset;height:15.75pt">
 										<td height="21" class="xl6316857" style="height:15.75pt">Depreciaciones</td>
 										<xsl:for-each select="$x-dimension">
-											<xsl:variable name="amt" select="key('depreciaciones',concat($rs,'::',.,'::','x'))"/>
+											<xsl:variable name="amt" select="key('depreciaciones',concat($rs,'::',.))"/>
+											<td class="xl6516857" align="right">
+												<xsl:call-template name="format">
+													<xsl:with-param name="value" select="sum($amt)"/>
+												</xsl:call-template>
+											</td>
+											<!--<xsl:variable name="amt" select="key('depreciaciones',concat($rs,'::',.,'::','x'))"/>
 											<xsl:variable name="cl" select="'613'"/>
 											<td class="xl6516857" align="right">
 												<xsl:apply-templates mode="xo:scope" select="$amt"/>
@@ -2430,7 +2441,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 														<xsl:with-param name="value" select="sum($amt)"/>
 													</xsl:call-template>
 												</a>
-											</td>
+											</td>-->
 										</xsl:for-each>
 									</tr>
 									<tr height="21" style="mso-height-source:userset;height:15.75pt">
@@ -2438,7 +2449,13 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 											Sueldos Y salarios<span style="mso-spacerun:yes"> </span>
 										</td>
 										<xsl:for-each select="$x-dimension">
-											<xsl:variable name="amt" select="key('sueldos',concat($rs,'::',.,'::','x'))"/>
+											<xsl:variable name="amt" select="key('sueldos',concat($rs,'::',.))"/>
+											<td class="xl6516857" align="right">
+												<xsl:call-template name="format">
+													<xsl:with-param name="value" select="sum($amt)"/>
+												</xsl:call-template>
+											</td>
+											<!--<xsl:variable name="amt" select="key('sueldos',concat($rs,'::',.,'::','x'))"/>
 											<xsl:variable name="cl" select="'601'"/>
 											<td class="xl6516857" align="right">
 												<xsl:apply-templates mode="xo:scope" select="$amt"/>
@@ -2447,7 +2464,7 @@ xmlns:x="urn:schemas-microsoft-com:office:excel"
 														<xsl:with-param name="value" select="sum($amt)"/>
 													</xsl:call-template>
 												</a>
-											</td>
+											</td>-->
 										</xsl:for-each>
 									</tr>
 									<tr height="21" style="mso-height-source:userset;height:15.75pt">

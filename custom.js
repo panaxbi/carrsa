@@ -656,7 +656,7 @@ xo.listener.on("fetch::#presentacion", function ({ document }) {
     document.select(`model/razon_social/*[not(@id=//data//@rs)]`).remove()
 })
 
-xo.listener.on(["fetch"], function ({ document }) {
+xo.listener.on(["fetch::*"], function ({ document }) {
     //if (document instanceof Comment && document.data == 'ack:empty') {
     //    throw (new Error(`La consulta no regresó un modelo válido. \nEsto es un error. Favor de reportarlo. \nCopie y pegue este código: \n${btoa(JSON.stringify(this.definition))}`));
     //}
